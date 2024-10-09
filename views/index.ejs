@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Star Wars </title>
+    <title>Star Wars Characters</title>
     <style>
         body {
             background-color: #f8f9fa;
@@ -13,53 +13,31 @@
         .container {
             margin-top: 50px;
         }
-        .table {
-            background-color: #ffffff;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .table th {
-            background-color: #007bff;
-            color: white;
+        .card {
+            margin-bottom: 20px; /* Espaciado entre tarjetas */
         }
         .btn-primary {
-            margin-top: 20px;
+            margin-top: 10px; /* Espacio entre el campo y el botón */
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 class="text-center">Star Wars</h1>
-    <div class="mb-3">
-        <label for="id" class="form-label">Buscar por ID:</label>
-        <input type="text" id="id" class="form-control" placeholder="Ingresar ID del personaje">
-        <button id="btn-id" class="btn btn-primary">Buscar</button>
+    <h1 class="text-center">Personajes de Star Wars</h1>
+
+    <div class="input-group mb-3">
+        <input type="text" id="id" class="form-control" placeholder="Buscar por ID del personaje">
     </div>
-    <div class="mb-3">
-        <label for="name" class="form-label">Buscar por nombre:</label>
-        <input type="text" id="name" class="form-control" placeholder="Ingresar nombre del personaje">
+    <button id="btn-id" class="btn btn-primary">Buscar</button>
+
+    <div class="input-group mb-3">
+        <input type="text" id="name" class="form-control" placeholder="Buscar por nombre del personaje">
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Altura</th>
-                <th>Masa</th>
-                <th>Color de cabello</th>
-                <th>Color de piel</th>
-                <th>Color de ojos</th>
-                <th>Año de nacimiento</th>
-                <th>Genero</th>
-                <th>Mundo</th>
-                <th>Especie</th>
-            </tr>
-        </thead>
-        <tbody id="tabla">
-            <!-- Los datos se llenarán aquí -->
-        </tbody>
-    </table>
+    <div id="tabla" class="row">
+        <!-- Los datos se llenarán aquí como tarjetas -->
+    </div>
 </div>
 
 <script>
@@ -71,22 +49,29 @@
         .then(data => {
             if (data.result) {
                 data.data.forEach(person => {
-                    const row = document.createElement('tr');
+                    const col = document.createElement('div');
+                    col.classList.add('col-md-4'); // Tres tarjetas por fila
 
-                    row.innerHTML = `
-                        <td>${person.name || 'N/A'}</td>
-                        <td>${person.height || 'N/A'}</td>
-                        <td>${person.mass || 'N/A'}</td>
-                        <td>${person.hair_color || 'N/A'}</td>
-                        <td>${person.skin_color || 'N/A'}</td>
-                        <td>${person.eye_color || 'N/A'}</td>
-                        <td>${person.birth_year || 'N/A'}</td>
-                        <td>${person.gender || 'N/A'}</td>
-                        <td>${person.homeworld || 'N/A'}</td>
-                        <td>${person.species || 'N/A'}</td>
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <h5 class="card-title">${person.name || 'N/A'}</h5>
+                            <p class="card-text"><strong>Altura:</strong> ${person.height || 'N/A'}</p>
+                            <p class="card-text"><strong>Masa:</strong> ${person.mass || 'N/A'}</p>
+                            <p class="card-text"><strong>Color de cabello:</strong> ${person.hair_color || 'N/A'}</p>
+                            <p class="card-text"><strong>Color de piel:</strong> ${person.skin_color || 'N/A'}</p>
+                            <p class="card-text"><strong>Color de ojos:</strong> ${person.eye_color || 'N/A'}</p>
+                            <p class="card-text"><strong>Año de nacimiento:</strong> ${person.birth_year || 'N/A'}</p>
+                            <p class="card-text"><strong>Género:</strong> ${person.gender || 'N/A'}</p>
+                            <p class="card-text"><strong>Mundo:</strong> ${person.homeworld || 'N/A'}</p>
+                            <p class="card-text"><strong>Especie:</strong> ${person.species || 'N/A'}</p>
+                        </div>
                     `;
-     
-                    tableBody.appendChild(row);
+
+                    col.appendChild(card);
+                    tableBody.appendChild(col);
                 });
             } else {
                 console.error('Error: No se encontraron datos.');
@@ -101,23 +86,32 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.result && data.data) {
-                        tableBody.innerHTML = '';
+                        tableBody.innerHTML = ''; // Limpiar contenido previo
 
                         const person = data.data;
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${person.name || 'N/A'}</td>
-                            <td>${person.height || 'N/A'}</td>
-                            <td>${person.mass || 'N/A'}</td>
-                            <td>${person.hair_color || 'N/A'}</td>
-                            <td>${person.skin_color || 'N/A'}</td>
-                            <td>${person.eye_color || 'N/A'}</td>
-                            <td>${person.birth_year || 'N/A'}</td>
-                            <td>${person.gender || 'N/A'}</td>
-                            <td>${person.homeworld || 'N/A'}</td>
-                            <td>${person.species || 'N/A'}</td>
+                        const col = document.createElement('div');
+                        col.classList.add('col-md-4'); // Tres tarjetas por fila
+
+                        const card = document.createElement('div');
+                        card.classList.add('card');
+
+                        card.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">${person.name || 'N/A'}</h5>
+                                <p class="card-text"><strong>Altura:</strong> ${person.height || 'N/A'}</p>
+                                <p class="card-text"><strong>Masa:</strong> ${person.mass || 'N/A'}</p>
+                                <p class="card-text"><strong>Color de cabello:</strong> ${person.hair_color || 'N/A'}</p>
+                                <p class="card-text"><strong>Color de piel:</strong> ${person.skin_color || 'N/A'}</p>
+                                <p class="card-text"><strong>Color de ojos:</strong> ${person.eye_color || 'N/A'}</p>
+                                <p class="card-text"><strong>Año de nacimiento:</strong> ${person.birth_year || 'N/A'}</p>
+                                <p class="card-text"><strong>Género:</strong> ${person.gender || 'N/A'}</p>
+                                <p class="card-text"><strong>Mundo:</strong> ${person.homeworld || 'N/A'}</p>
+                                <p class="card-text"><strong>Especie:</strong> ${person.species || 'N/A'}</p>
+                            </div>
                         `;
-                        tableBody.appendChild(row);
+
+                        col.appendChild(card);
+                        tableBody.appendChild(col);
                     } else {
                         console.error('Personaje no encontrado.');
                         alert('Personaje no encontrado con ese ID.');
@@ -141,26 +135,35 @@
             .then(response => response.json())
             .then(data => {
                 if (data.result && data.data.length > 0) {
-                    tableBody.innerHTML = '';
+                    tableBody.innerHTML = ''; // Limpiar contenido previo
 
                     data.data.forEach(person => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${person.name || 'N/A'}</td>
-                            <td>${person.height || 'N/A'}</td>
-                            <td>${person.mass || 'N/A'}</td>
-                            <td>${person.hair_color || 'N/A'}</td>
-                            <td>${person.skin_color || 'N/A'}</td>
-                            <td>${person.eye_color || 'N/A'}</td>
-                            <td>${person.birth_year || 'N/A'}</td>
-                            <td>${person.gender || 'N/A'}</td>
-                            <td>${person.homeworld || 'N/A'}</td>
-                            <td>${person.species || 'N/A'}</td>
+                        const col = document.createElement('div');
+                        col.classList.add('col-md-4'); // Tres tarjetas por fila
+
+                        const card = document.createElement('div');
+                        card.classList.add('card');
+
+                        card.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">${person.name || 'N/A'}</h5>
+                                <p class="card-text"><strong>Altura:</strong> ${person.height || 'N/A'}</p>
+                                <p class="card-text"><strong>Masa:</strong> ${person.mass || 'N/A'}</p>
+                                <p class="card-text"><strong>Color de cabello:</strong> ${person.hair_color || 'N/A'}</p>
+                                <p class="card-text"><strong>Color de piel:</strong> ${person.skin_color || 'N/A'}</p>
+                                <p class="card-text"><strong>Color de ojos:</strong> ${person.eye_color || 'N/A'}</p>
+                                <p class="card-text"><strong>Año de nacimiento:</strong> ${person.birth_year || 'N/A'}</p>
+                                <p class="card-text"><strong>Género:</strong> ${person.gender || 'N/A'}</p>
+                                <p class="card-text"><strong>Mundo:</strong> ${person.homeworld || 'N/A'}</p>
+                                <p class="card-text"><strong>Especie:</strong> ${person.species || 'N/A'}</p>
+                            </div>
                         `;
-                        tableBody.appendChild(row);
+
+                        col.appendChild(card);
+                        tableBody.appendChild(col);
                     });
                 } else {
-                    tableBody.innerHTML = '<tr><td colspan="10">No se encontraron personajes con ese nombre</td></tr>';
+                    tableBody.innerHTML = '<div class="col-12"><div class="alert alert-warning">No se encontraron personajes con ese nombre</div></div>';
                 }
             })
             .catch(err => console.error('Error al buscar por nombre:', err));
